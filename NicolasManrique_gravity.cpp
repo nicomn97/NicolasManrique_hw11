@@ -13,37 +13,30 @@ int main () {
     float G = 10;
     float M = 1000;
     float h;
-    cout<<"Ingresar paso de tiempo (h en segundos)";
-    cin>>h;
-    float m;
-    cout<<"Ingresar masa m (en kg)";
-    cin>>m;
+    //Ingresar paso de tiempo (h en segundos)
+    h=0.001;
     float x0;
-    cout<<"Ingresar posicion inicial (en metros)";
-    cin>>x0;
+    //Ingresar posicion inicial (en metros)
+    x0=100;
     float v0;
-    cout<<"Ingresar velocidad inicial (en m/s)";
-    cin>>v0;
+    //Ingresar velocidad inicial (en m/s)
+    v0=0;
     float x00=x0;
-    float x1=dx();
-    I11=dI(dt,St1,It1,b1,g1);
+    float x1=dx(v0,h,x0);
+    float v1=dv(G,M,x0,h,v0);
+    cout << x0<<" "<<v0<<" "<<"0"<<endl;
 
-    int i = 0;
-    while(x00>0.9*x1){
+    int i = 1;
+
+    while(x1>0.01*x00){
         float t=h*i;
-        cout << x0<<" "<<v0<<" "<<t;
-        float Stprov1 = St1;
-        float Itprov1 = It1;
-        St1=dSlf(dt,St1,It1,b1,S11);
-        S11=Stprov1;
-        It1=dIlf(dt,Stprov1,It1,b1,g1,I11);
-        I11=Itprov1;
-        float Stprov2 = St2;
-        float Itprov2 = It2;
-        St2=dSlf(dt,St2,It2,b2,S22);
-        S22=Stprov2;
-        It2=dIlf(dt,Stprov2,It2,b2,g2,I22);
-        I22=Itprov2;
+        cout << x1<<" "<<v1<<" "<<t<<endl;
+        float x1prov = x1;
+        float v1prov = v1;
+        x1=dxlf(v1, h, x0);
+        v1=dvlf( G, M, x0, h, v0);
+        x0=x1prov;
+        v0=v1prov;
         i+=1;
    }
    return 0;
@@ -76,7 +69,7 @@ float dvlf(float G, float M, float x, float h, float v0){
 float dxlf(float v, float h, float x0){
 
     float res;
-    res = v*2.0*h+x0;
+    res = (v*2.0*h)+x0;
     return res;
 
 }
